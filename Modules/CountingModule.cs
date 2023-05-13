@@ -3,15 +3,15 @@ using Discord.Commands;
 using Discord.WebSocket;
 
 public class CountingModule : ModuleBase<SocketCommandContext> {
-    [Command("verifycount")]
-    public async Task TestAsync() {
+    [Command("count")]
+    public async Task CountAsync(ulong channelId) {
         SocketUserMessage message = Context.Message;
         DiscordSocketClient client = Context.Client;
-        ISocketMessageChannel commandCh = Context.Channel;
+        ISocketMessageChannel cmdChnl = Context.Channel;
 
         await message.DeleteAsync();
 
-        IMessageChannel? countChannel = client.GetChannelAsync(1098950016795680799).Result as IMessageChannel;
+        IMessageChannel? countChannel = client.GetChannelAsync(channelId).Result as IMessageChannel;
         if (countChannel == null) {
             Console.WriteLine("Error: Given channel could not be found");
             return;
@@ -35,9 +35,9 @@ public class CountingModule : ModuleBase<SocketCommandContext> {
                 Console.WriteLine(mes.Content);
 
                 if (!parse) {
-                    await commandCh.SendMessageAsync(mes.Content + " cannot parse");
+                    await cmdChnl.SendMessageAsync(mes.Content + " cannot parse");
                 } else if (prevNum != curNum + 1) {
-                    await commandCh.SendMessageAsync(mes.Content + " wrong order");
+                    await cmdChnl.SendMessageAsync(mes.Content + " wrong order");
                 } else {
                     prevNum = curNum;
                 }
