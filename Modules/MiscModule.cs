@@ -13,4 +13,14 @@ public class MiscModule : ModuleBase<SocketCommandContext> {
 
         await (Context.Channel as ITextChannel)!.DeleteMessagesAsync(messages);
     }
+
+    [Command("say")] 
+    public async Task SendMessageAsync([Remainder] string mes) {
+        await Context.Channel.SendMessageAsync(mes);
+    }
+
+    [Command("mudae")]
+    public async Task mudae(string cmdString) {
+
+    }
 }
