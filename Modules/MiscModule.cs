@@ -18,9 +18,4 @@ public class MiscModule : ModuleBase<SocketCommandContext> {
     public async Task SendMessageAsync([Remainder] string mes) {
         await Context.Channel.SendMessageAsync(mes);
     }
-
-    [Command("mudae")]
-    public async Task mudae(string cmdString) {
-
-    }
 }
