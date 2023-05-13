@@ -5,12 +5,12 @@ using Discord.Commands;
 public class LoggingService 
 {
     public LoggingService(DiscordSocketClient _client, CommandService _commands) {
-        //hooks socketclient logging to LogAsync
-        _client.Log += LogAsync;
-        //hooks commandservice logging to LogAsync
-        _commands.Log += LogAsync;
+        //hooks socketclient logging to LogError
+        _client.Log += LogError;
+        //hooks commandservice logging to LogError
+        _commands.Log += LogError;
     }
-    private Task LogAsync(LogMessage message) {
+    private Task LogError(LogMessage message) {
         if (message.Exception is CommandException cmdException) {
 			Console.WriteLine($"[CommandException]: {cmdException.Command.Aliases.First()}, Severity: {message.Severity}"
 				+ $" failed to execute in {cmdException.Context.Channel}.");
@@ -18,8 +18,8 @@ public class LoggingService
 		}
 		else {
             Console.WriteLine($"[LogMessage]: {message}, Severity: {message.Severity}");
-        }			
+        }
 
-		return Task.CompletedTask;
+        return Task.CompletedTask;
     }
 }
