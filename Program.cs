@@ -6,9 +6,11 @@ public class Program
 	public static Task Main(string[] args) => new Program().MainAsync();
 
     private DiscordSocketClient? _client;
-    private LoggingService? logger;
-    private CommandService? commands;
-    private CommandHandler? cmdhandler;
+    private LoggingService? _logger;
+    private CommandService? _commands;
+    private CommandHandler? _cmdhandler;
+    private MudaeCommandHandler? _mudaecmdhandler;
+    private MudaeService? _mudae;
 
 	public async Task MainAsync()
 	{
@@ -17,12 +19,18 @@ public class Program
         };
 
         _client = new DiscordSocketClient(clientconfig);
-        commands = new CommandService();
-        cmdhandler = new CommandHandler(_client, commands);
-        logger = new LoggingService(_client, commands);
+
+        _commands = new CommandService();
+        _cmdhandler = new CommandHandler(_client, _commands);
+
+        _mudae = new MudaeService();
+        _mudaecmdhandler = new MudaeCommandHandler(_client, _mudae);
+
+        _logger = new LoggingService(_client, _commands);
         
         string token = File.ReadAllText("token.txt");
-        await cmdhandler.LoadCommandsAsync();
+        await _cmdhandler.LoadCommandsAsync();
+        await _mudaecmdhandler.LoadLogger();
         await _client.LoginAsync(TokenType.Bot, token);
         await _client.StartAsync();
 
