@@ -6,7 +6,10 @@ public class Program
 	public static Task Main(string[] args) => new Program().MainAsync();
 
     private DiscordSocketClient? _client;
+    private LoggingService? logger;
     private CommandService? commands;
+    private CommandHandler? cmdhandler;
+
 	public async Task MainAsync()
 	{
         var clientconfig = new DiscordSocketConfig() {
@@ -15,8 +18,8 @@ public class Program
 
         _client = new DiscordSocketClient(clientconfig);
         commands = new CommandService();
-        CommandHandler cmdhandler = new CommandHandler(_client, commands);
-        LoggingService logger = new LoggingService(_client, commands);
+        cmdhandler = new CommandHandler(_client, commands);
+        logger = new LoggingService(_client, commands);
         
         string token = File.ReadAllText("token.txt");
         await cmdhandler.LoadCommandsAsync();
