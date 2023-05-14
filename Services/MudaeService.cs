@@ -12,6 +12,7 @@ public class MudaeService
         _client = client;
     }
 
+    // TODO: DELETE
     public Task LoadLogger() {
 
         _client.MessageReceived += LogMudaeResponse;
@@ -19,6 +20,7 @@ public class MudaeService
         return Task.CompletedTask;
     }
 
+    // TODO: FIGURE OUT WHAT TO DO WITH THIS
     public Task LogMudaeResponse(SocketMessage messageParam) {
 
         //doesn't process command if it's a system message or is empty

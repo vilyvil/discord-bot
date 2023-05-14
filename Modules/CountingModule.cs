@@ -3,6 +3,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 
 public class CountingModule : ModuleBase<SocketCommandContext> {
+    // TODO: FIGURE OUT WHAT TO DO WITH THIS
     [Command("count")]
     public async Task CountAsync(ulong channelId) {
         SocketUserMessage message = Context.Message;
