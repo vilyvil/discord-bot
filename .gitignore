@@ -14,5 +14,11 @@ token.txt
 # Built Visual Studio Code Extensions
 *.vsix
 
+*.suo
+*.user
+_ReSharper.*
+bin
+obj
+packages
 
 .fake
