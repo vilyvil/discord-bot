@@ -13,7 +13,7 @@ public class CountingModule : ModuleBase<SocketCommandContext> {
 
         IMessageChannel? countChannel = client.GetChannelAsync(channelId).Result as IMessageChannel;
         if (countChannel == null) {
-            Console.WriteLine("Error: Given channel could not be found");
+            await message.Channel.SendMessageAsync("error: given channel could not be found");
             return;
         }
 
@@ -23,30 +23,42 @@ public class CountingModule : ModuleBase<SocketCommandContext> {
         int prevNum;
         bool parse = Int32.TryParse(countChannel.GetMessageAsync(last_verified_message).Result.Content, out prevNum);
 
-        if (parse) {
-            //while (countChannel.GetMessagesAsync(1) != countChannel.GetMessageAsync(last_verified_message)) {
-            IEnumerable<IMessage> messages = countChannel.GetMessagesAsync(last_verified_message, Direction.Before, 500, CacheMode.AllowDownload).FlattenAsync().Result.Reverse();
-            
-            int curNum;
-
-            foreach (IMessage mes in messages) {
-                parse = Int32.TryParse(mes.Content, out curNum);
-
-                Console.WriteLine(mes.Content);
-
-                if (!parse) {
-                    await cmdChnl.SendMessageAsync(mes.Content + " cannot parse");
-                } else if (prevNum != curNum + 1) {
-                    await cmdChnl.SendMessageAsync(mes.Content + " wrong order");
-                } else {
-                    prevNum = curNum;
-                }
-            }
-            //}
-
-            //last_verified_message = 
-        } else {
-            await message.Channel.SendMessageAsync("error: message " + last_verified_message + " could not be converted to int");
+        if (!parse) {
+            await message.Channel.SendMessageAsync("error: message with id " + last_verified_message + " could not be converted to int");
+            return;
         }
+
+        //while (countChannel.GetMessagesAsync(1) != countChannel.GetMessageAsync(last_verified_message)) {
+        IEnumerable<IMessage> messages = countChannel.GetMessagesAsync(last_verified_message, Direction.Before, 500, CacheMode.AllowDownload)
+                                                    .FlattenAsync()
+                                                    .Result
+                                                    .Reverse();
+        
+        int curNum;
+
+        foreach (IMessage mes in messages) {
+            parse = Int32.TryParse(mes.Content, out curNum);
+
+            Console.WriteLine(mes.Content);
+
+            if (!parse) {
+                await cmdChnl.SendMessageAsync(mes.Content + " cannot parse");
+            } else if (prevNum != curNum + 1) {
+                await cmdChnl.SendMessageAsync(mes.Content + " wrong order");
+            } else {
+                prevNum = curNum;
+            }
+        }
+        //}
+
+        //last_verified_message = 
+    }
+
+    public ulong getVerifiedMessageId() {
+        return 0;
+    }
+
+    public void setVerifiedMessageId(ulong msgId) {
+
     }
 }
