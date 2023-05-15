@@ -4,38 +4,29 @@ using Discord.Commands;
 
 public class MudaeService
 {
-    private readonly DiscordSocketClient _client;
-    private readonly CommandService _commands;
-    public MudaeService(DiscordSocketClient client, CommandService commands)
-    {
-        _commands = commands;
-        _client = client;
-    }
+    public async Task LogResponseAsync(SocketCommandContext context) {
+        string command = context.Message.Content.ToLower();
+        IMessage? mudaeMessage = GetMudaeMessage(context);
+        if (mudaeMessage == null) return;
+        string response = mudaeMessage.Content.ToLower();
 
-    // TODO: DELETE
-    public Task LoadLogger() {
-
-        _client.MessageReceived += LogMudaeResponse;
-
-        return Task.CompletedTask;
-    }
-
-    // TODO: FIGURE OUT WHAT TO DO WITH THIS
-    public Task LogMudaeResponse(SocketMessage messageParam) {
-
-        //doesn't process command if it's a system message or is empty
-        var message = messageParam as SocketUserMessage;
-        if (message == null || message.Content == null) return Task.CompletedTask;
-
-        //tracks where the prefix ends and where command begins
-        int argPos = 0;
-
-        //doesn't process command if prefix doesn't match, user doesn't match (has to be me), or if the user is a bot.
-        if (!message.HasCharPrefix('$', ref argPos) || 
-            message.Author.Id != 283810729033990147 ||
-            message.Author.IsBot)
-            return Task.CompletedTask;
         
-        return Task.CompletedTask;
+    }
+
+    public IMessage? GetMudaeMessage(SocketCommandContext context) {
+        IMessage[] messages = context.Channel.GetMessagesAsync(fromMessage: context.Message, dir: Direction.After, limit: 2)
+                                                        .FlattenAsync()
+                                                        .Result
+                                                        .ToArray();
+
+        foreach(IMessage message in messages) {
+            if (message.Author.Id == 432610292342587392)
+                return message;
+        }
+        return null;
+    }
+
+    public async Task getResponseAsync(string command) {
+        
     }
 }
