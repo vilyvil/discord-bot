@@ -14,6 +14,20 @@ public class MudaeModule : ModuleBase<SocketCommandContext> {
 
     }
 
+    [Command("copy")]
+    public async Task CopyMudae(string link) {
+        await Context.Message.DeleteAsync();
+        ulong channelId = Convert.ToUInt64(link.Substring(49, 19));
+        ulong messageId = Convert.ToUInt64(link.Substring(69, 19));
+
+        IMessage mes = await Context.Guild.GetTextChannel(channelId).GetMessageAsync(messageId);
+
+        EmbedBuilder? embed = mes.Embeds.First().ToEmbedBuilder();
+        string content = ".";
+
+        await Context.Channel.SendMessageAsync(content, embed: embed.Build());
+    }
+
     /*[Command("correct")]
     public async Task LogMudaeResponseAsync(ulong messageId) {
         await Context.Message.DeleteAsync();

