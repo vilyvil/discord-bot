@@ -27,24 +27,37 @@ public class MiscModule : ModuleBase<SocketCommandContext> {
     }
 
     [Command("graph")]
-    public async Task Graph(ulong messageId) {
+    public async Task Graph(ulong messageId, string hasIds) {
         await Context.Message.DeleteAsync();
         IMessage mes = await Context.Channel.GetMessageAsync(messageId);
 
-        DateTimeOffset timestamp = mes.Timestamp;
-        string[] rawRanks = mes.Embeds.First().Description.Split("\n").Skip(5).ToArray();
+        string timestamp = mes.Timestamp.ToString("yyyy-MM-dd");
+        string[] rawRanks = mes.Embeds.First().Description
+                                                .Split("\n")
+                                                .Skip(5)
+                                                .ToArray();
 
-        string[] ranks = new string[rawRanks.Length + 1];
+        string[] names = new string[rawRanks.Length + 1];
+        string[] kakera = new string[rawRanks.Length + 1];
 
-        string skipChar = "	";
         for (int i = 0; i < rawRanks.Length; i++) {
-            ranks[i + 1] = rawRanks[i].Split("**")[1] + skipChar + rawRanks[i].Split("**")[2].Remove(0, 3);
+            names[i] = rawRanks[i].Split("**")[1];
+            kakera[i] = rawRanks[i].Split("**")[2].Remove(0, 3);
         }
 
-        ranks[0] = " " + skipChar + timestamp.Date.ToShortDateString();
+        //Open the workbook (or create it if it doesn't exist)
+	    using (var p = new ExcelPackage(@"test.xlsx"))
+        {
+            var ws = p.Workbook.Worksheets.Add("KakeraSheet");
+            //The style object is used to access most cells formatting and styles.
+            ws.Cells[1, 1, 20, 1].LoadFromCollection(names);
+            ws.Cells[1, 2, 20, 1].LoadFromCollection(kakera);
+            //Save and close the package.
+            p.Save();
+        } 
+    }
 
-        foreach(string rank in ranks) {
-            Console.WriteLine(rank);
-        }
+    class userInfo {
+        
     }
 }
