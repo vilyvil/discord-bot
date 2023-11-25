@@ -11,8 +11,6 @@ public class Program
     private LoggingService? _logger;
     private CommandService? _commands;
     private CommandHandler? _cmdhandler;
-    private MudaeCommandHandler? _mudaecmdhandler;
-    private MudaeService? _mudae;
 
 	public async Task MainAsync()
 	{
@@ -25,14 +23,10 @@ public class Program
         _commands = new CommandService();
         _cmdhandler = new CommandHandler(_client, _commands);
 
-        _mudae = new MudaeService();
-        _mudaecmdhandler = new MudaeCommandHandler(_client, _mudae);
-
         _logger = new LoggingService(_client, _commands);
         
         string token = File.ReadAllText("token.txt");
         await _cmdhandler.LoadCommandsAsync();
-        await _mudaecmdhandler.LoadLogger();
         await _client.LoginAsync(TokenType.Bot, token);
         await _client.StartAsync();
 
