@@ -2,10 +2,13 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 
+// Commands for a fun discord channel where community counts as high as possible starting from 1
+// NOT FINISHED LOL
 public class CountingModule : ModuleBase<SocketCommandContext> {
     // TODO: FIGURE OUT WHAT TO DO WITH THIS
     [Command("count")]
     public async Task CountAsync(ulong channelId) {
+
         SocketUserMessage message = Context.Message;
         DiscordSocketClient client = Context.Client;
         ISocketMessageChannel cmdChnl = Context.Channel;
