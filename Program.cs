@@ -1,7 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using Discord.Commands;
-using OfficeOpenXml;
 
 public class Program
 {
@@ -29,8 +28,6 @@ public class Program
         await _cmdhandler.LoadCommandsAsync();
         await _client.LoginAsync(TokenType.Bot, token);
         await _client.StartAsync();
-
-        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
         // Block this task until the program is closed.
         await Task.Delay(-1);
